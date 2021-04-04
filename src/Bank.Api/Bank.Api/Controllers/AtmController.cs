@@ -25,7 +25,7 @@ namespace Bank.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Withdrawal(WithdrawalRequest request, CancellationToken cancellationToken = default)
         {
-            IMessage message = new AccountValidated(Guid.NewGuid(), Guid.NewGuid(), new WithdrawalMessage(Guid.NewGuid(), request.AccountNumber, request.Amount));
+            IMessage message = new AccountValidated(Guid.NewGuid(), Guid.NewGuid(), request.AccountNumber, request.Amount);
             await _bus.PublishAsync(message, cancellationToken);
 
             return Accepted(new 

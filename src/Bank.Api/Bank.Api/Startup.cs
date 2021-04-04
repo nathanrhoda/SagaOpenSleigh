@@ -16,8 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bank.Api
-{
-    // TODO: Fix Mongo Authentication errors
+{    
     public class Startup
     {
         public Startup(IConfiguration configuration)

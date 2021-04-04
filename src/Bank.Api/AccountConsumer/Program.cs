@@ -47,9 +47,10 @@ namespace AccountConsumer
                     })
                     .UseMongoPersistence(mongoCfg);
 
-                    cfg.AddSaga<WithdrawalSaga, WithdrawalInitiatedState>()
-                    .UseStateFactory<AccountValidated>(msg => new WithdrawalInitiatedState(msg.message))
+                    cfg.AddSaga<WithdrawalSaga, WithdrawalSagaState>()
+                    .UseStateFactory<AccountValidated>(msg => new WithdrawalSagaState(msg.CorrelationId))                    
                     .UseRabbitMQTransport();
+                    
                     ////cfg.AddSaga<SimpleSaga, SimpleSagaState>()
                     ////    .UseStateFactory<StartSimpleSaga>(msg => new SimpleSagaState(msg.CorrelationId))
                     ////    .UseRabbitMQTransport();
