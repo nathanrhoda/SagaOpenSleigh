@@ -13,3 +13,5 @@
 /src/Bank.Api/Bank.Saga/obj
 /src/Bank.Api/WithdrawalConsumer/bin/Debug
 /src/Bank.Api/WithdrawalConsumer/obj
+/src/Bank.Api/Bank.Orchestrator/bin/Debug
+/src/Bank.Api/Bank.Orchestrator/obj
