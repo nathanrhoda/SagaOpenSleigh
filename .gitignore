@@ -11,3 +11,5 @@
 /src/Bank.Api/Bank.Messages/obj
 /src/Bank.Api/Bank.Saga/bin/Debug
 /src/Bank.Api/Bank.Saga/obj
+/src/Bank.Api/WithdrawalConsumer/bin/Debug
+/src/Bank.Api/WithdrawalConsumer/obj

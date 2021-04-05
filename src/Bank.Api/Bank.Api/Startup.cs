@@ -1,22 +1,21 @@
+using Bank.Saga.Withdrawal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OpenSleigh.Core.DependencyInjection;
 using OpenSleigh.Persistence.Mongo;
 using OpenSleigh.Transport.RabbitMQ;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+// TODO: Have more than 1 consumer for the Saga & return a value 
+// TODO: Integrate grpc with the queueing tasks
+// TODO: Create a UI that will send a request and wait for positive response
+// TODO: Implement negative scenario from UI as well
 
 namespace Bank.Api
-{    
+{
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -51,7 +50,7 @@ namespace Bank.Api
                 cfg.SetPublishOnly()
                     .UseRabbitMQTransport(rabbitCfg, builder =>
                     {
-                    
+                        //builder.UseMessageNamingPolicy<WithdrawalInitiated>(() => new QueueReferences("withdrawal.initiated", "withdrawal.initiated.start", "withdrawal.initiated.dead", "withdrawal.initiated.dead.start"));
                     })
                     .UseMongoPersistence(mongoCfg);
             });

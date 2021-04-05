@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bank.Messages\Bank.Messages.csproj" />
     <ProjectReference Include="..\Bank.Saga\Bank.Saga.csproj" />
   </ItemGroup>
 

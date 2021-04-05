@@ -1,5 +1,4 @@
-﻿using Bank.Messages;
-using OpenSleigh.Core;
+﻿using OpenSleigh.Core;
 using OpenSleigh.Core.Messaging;
 using System;
 using System.Threading;
@@ -17,6 +16,10 @@ namespace Bank.Saga.Withdrawal
         public string AccountNumber { get; set; }
         public double Amount { get; set; }
 
+        public bool isWithdrawalApproved { get; set; }
+        public bool isAccountBalanceUpdated { get; set; }
+        public bool isWithdrawalProcessed { get; set; }
+        public bool isWithdrawalComplete { get; set; }
         public bool isSuccessful { get; set; }
     } 
 
@@ -39,6 +42,7 @@ namespace Bank.Saga.Withdrawal
         public async Task HandleAsync(IMessageContext<WithdrawalInitiated> context, CancellationToken cancellationToken = default)
         {
             Console.WriteLine($"1. Withdrawal Initiated (Validate Account Number and check balances): {context.Message.CorrelationId} & Account Number: {context.Message.AccountNumber}");
+            this.State.isWithdrawalApproved = true;
             var message = new WithdrawalApproved(Guid.NewGuid(), context.Message.CorrelationId, context.Message.AccountNumber, context.Message.Amount);
             this.Publish(message);
         }
@@ -46,6 +50,7 @@ namespace Bank.Saga.Withdrawal
         public async Task HandleAsync(IMessageContext<WithdrawalApproved> context, CancellationToken cancellationToken = default)
         {
             Console.WriteLine($"2. Withdrawal Approved (Update Account Balance) : {context.Message.CorrelationId} & Account Number: {context.Message.AccountNumber}");
+            this.State.isAccountBalanceUpdated = true;
             var message = new AccountBalanceUpdated(Guid.NewGuid(), context.Message.CorrelationId, context.Message.AccountNumber, context.Message.Amount);
             this.Publish(message);
         }
@@ -53,11 +58,10 @@ namespace Bank.Saga.Withdrawal
         public async Task HandleAsync(IMessageContext<AccountBalanceUpdated> context, CancellationToken cancellationToken = default)
         {
             Console.WriteLine($"3. Account Balance Updated (Amount for withdrawal has been deducted from Account): {context.Message.CorrelationId} & Account Number: {context.Message.AccountNumber}");
+            this.State.isWithdrawalProcessed = true;
             var message = new WithdrawalProcessed(Guid.NewGuid(), context.Message.CorrelationId, context.Message.AccountNumber, context.Message.Amount);
             this.Publish(message);
         }
-
-     
 
         public async Task HandleAsync(IMessageContext<WithdrawalProcessed> context, CancellationToken cancellationToken = default)
         {
@@ -65,7 +69,8 @@ namespace Bank.Saga.Withdrawal
 
             if (context.Message.Amount > 10000)
                 throw new ApplicationException("You drawing to much money");
-
+            
+            this.State.isWithdrawalComplete = true;
             var message = new WithdrawalCompleted(Guid.NewGuid(), context.Message.CorrelationId, context.Message.AccountNumber, context.Message.Amount);
             this.Publish(message);            
         }

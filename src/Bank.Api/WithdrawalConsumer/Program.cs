@@ -1,5 +1,4 @@
-﻿using Bank.Saga;
-using Bank.Saga.Withdrawal;
+﻿using Bank.Saga.Withdrawal;
 using Microsoft.Extensions.Hosting;
 using OpenSleigh.Core.DependencyInjection;
 using OpenSleigh.Persistence.Mongo;
@@ -7,7 +6,7 @@ using OpenSleigh.Transport.RabbitMQ;
 using System;
 using System.Threading.Tasks;
 
-namespace AccountConsumer
+namespace WithdrawalConsumer
 {
     class Program
     {
@@ -39,20 +38,10 @@ namespace AccountConsumer
 
                     cfg.UseRabbitMQTransport(rabbitCfg, builder =>
                     {
-                        //builder.UseMessageNamingPolicy<WithdrawalInitiated>(() => new QueueReferences("withdrawal.initiated", "withdrawal.initiated.start", "withdrawal.initiated.dead", "withdrawal.initiated.dead.start"));
-                        //builder.UseMessageNamingPolicy<WithdrawalApproved>(() => new QueueReferences("withdrawal.approved", "withdrawal.approved.start", "withdrawal.approved.dead", "withdrawal.approved.dead.start"));
-                        //builder.UseMessageNamingPolicy<AccountBalanceUpdated>(() => new QueueReferences("withdrawal.balanceupdate", "withdrawal.balanceupdate.start", "withdrawal.balanceupdate.dead", "withdrawal.balanceupdate.dead.start"));                        
-                        //builder.UseMessageNamingPolicy<WithdrawalCompleted>(() => new QueueReferences("withdrawal.completed", "withdrawal.completed.start", "withdrawal.completed.dead", "withdrawal.completed.dead.start"));
+                        //builder.UseMessageNamingPolicy<WithdrawalProcessed>(() => new QueueReferences("withdrawal.processed", "withdrawal.processed.start", "withdrawal.processed.dead", "withdrawal.processed.dead.start"));
                     })
                     .UseMongoPersistence(mongoCfg);
 
-                    cfg.AddSaga<WithdrawalSaga, WithdrawalSagaState>()
-                    .UseStateFactory<WithdrawalInitiated>(msg => new WithdrawalSagaState(msg.CorrelationId))                    
-                    .UseRabbitMQTransport();
-
-                    //cfg.AddSaga<WithdrawalSaga, WithdrawalSagaState>()
-                    //.UseStateFactory<WithdrawalCompleted>(msg => new WithdrawalSagaState(msg.CorrelationId))
-                    //.UseRabbitMQTransport();
                 });
             });
     }
