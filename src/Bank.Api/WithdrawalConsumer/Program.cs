@@ -1,4 +1,5 @@
-﻿using Bank.Saga.Withdrawal;
+﻿using Bank.Saga.AtmWithdrawal;
+using Bank.Saga.Withdrawal;
 using Microsoft.Extensions.Hosting;
 using OpenSleigh.Core.DependencyInjection;
 using OpenSleigh.Persistence.Mongo;
@@ -41,6 +42,10 @@ namespace WithdrawalConsumer
                         //builder.UseMessageNamingPolicy<WithdrawalProcessed>(() => new QueueReferences("withdrawal.processed", "withdrawal.processed.start", "withdrawal.processed.dead", "withdrawal.processed.dead.start"));
                     })
                     .UseMongoPersistence(mongoCfg);
+
+                    cfg.AddSaga<AtmWithdrawalSaga, AtmWithdrawalSagaState>()
+                      .UseStateFactory<ProcessAtmWithdrawal>(msg => new AtmWithdrawalSagaState(msg.CorrelationId, msg.Amount))
+                      .UseRabbitMQTransport();
 
                 });
             });

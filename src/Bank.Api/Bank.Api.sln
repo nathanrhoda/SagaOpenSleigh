@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccountConsumer", "AccountC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bank.Saga", "Bank.Saga\Bank.Saga.csproj", "{5A334CBE-20AB-48B0-829C-FB88EC64785A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WithdrawalConsumer", "WithdrawalConsumer\WithdrawalConsumer.csproj", "{6C8D9146-76DA-47B0-B318-3F8786883025}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtmWithdrawalConsumer", "WithdrawalConsumer\AtmWithdrawalConsumer.csproj", "{6C8D9146-76DA-47B0-B318-3F8786883025}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bank.Orchestrator", "Bank.Orchestrator\Bank.Orchestrator.csproj", "{546E5823-A0D7-4946-81E9-44E380A7AE50}"
 EndProject

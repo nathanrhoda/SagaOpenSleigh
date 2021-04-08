@@ -45,7 +45,7 @@ namespace Bank.Orchestrator
                    cfg.AddSaga<WithdrawalSaga, WithdrawalSagaState>()
                    .UseStateFactory<WithdrawalInitiated>(msg => new WithdrawalSagaState(msg.CorrelationId))
                    .UseRabbitMQTransport()
-                   .UseRetryPolicy<WithdrawalValidated>(builder =>
+                   .UseRetryPolicy<WithdrawalInitiated>(builder =>
                    {
                        builder.WithMaxRetries(3)
                           .Handle<RetryException>()
@@ -55,18 +55,7 @@ namespace Bank.Orchestrator
                                        System.Console.WriteLine(
                                            $"tentative #{ctx.ExecutionIndex} failed: {ctx.Exception.Message}");
                                    });
-                   })
-                   .UseRetryPolicy<AccountBalanceUpdated>(builder =>
-                   {
-                       builder.WithMaxRetries(3)
-                          .Handle<RetryException>()
-                                   .WithDelay(executionIndex => TimeSpan.FromSeconds(executionIndex))
-                                   .OnException(ctx =>
-                                   {
-                                       System.Console.WriteLine(
-                                           $"tentative #{ctx.ExecutionIndex} failed: {ctx.Exception.Message}");
-                                   });
-                   });
+                   });                  
                });
            });
     }
